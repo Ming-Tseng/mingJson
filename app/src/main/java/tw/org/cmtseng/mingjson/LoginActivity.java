@@ -4,22 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,41 +39,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void buildview() {
-        edtuserid =  findViewById(R.id.userid);
-        edPasswd =   findViewById(R.id.passwd);
-        Button btnlogin = findViewById(R.id.login);
+        edtuserid = (EditText) findViewById(R.id.userid);
+        edPasswd = (EditText) findViewById(R.id.passwd);
+        Button btnlogin = (Button) findViewById(R.id.login);
         btnlogin.setOnClickListener(this);
-        Button btncancel =  findViewById(R.id.cancel);
+        Button btncancel = (Button) findViewById(R.id.cancel);
         pref = getSharedPreferences("atm", MODE_PRIVATE);
         edtuserid.setText(pref.getString("PREF_USERID", ""));
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Log.d(TAG, "buildview: "+ database.toString());
         DatabaseReference myRef = database.getReference("message");
         myRef.setValue("Hello, World!");
-        //Read from the database
-        ListView listView =  findViewById(R.id.list);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1);
-        listView.setAdapter(adapter);
-
-        DatabaseReference reference_contacts = FirebaseDatabase.getInstance().getReference("contacts");
-        Log.d(TAG, "buildview: 65 "+ reference_contacts.toString());
-        // Read from the database
-
-        reference_contacts.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                adapter.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren() ) {
-                    adapter.add(ds.child("name").getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     @Override
@@ -102,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-     class   LoginTask extends AsyncTask<String, Void, Integer> {
+    class LoginTask extends AsyncTask<String, Void, Integer> {
         @Override
         protected Integer doInBackground(String... params) {
             int data = 0;
