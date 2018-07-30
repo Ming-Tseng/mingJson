@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -29,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d(TAG, "onCreate: " + "into  LoginActivity");
+        Log.d(TAG, "onCreate:  34 " + "into  LoginActivity");
         buildview();
 
     }
@@ -43,6 +46,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button btncancel = (Button) findViewById(R.id.cancel);
         pref = getSharedPreferences("atm", MODE_PRIVATE);
         edtuserid.setText(pref.getString("PREF_USERID", ""));
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Log.d(TAG, "buildview: "+ database.toString());
+        DatabaseReference myRef = database.getReference("message");
+        myRef.setValue("Hello, World!");
     }
 
     @Override
@@ -61,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.cancel:
                 Log.d(TAG, "onClick: " + " view33");
-                return;
+
         }
     }
 
@@ -85,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             super.onPostExecute(integer);
             if (integer == 60) {
                 Log.d(TAG, "onPostExecute:  Data = 60 " +integer);
-                pref.edit().putString("PREF_USERID", uid).commit();
+                pref.edit().putString("PREF_USERID", uid).apply();
                 Log.d(TAG, "onPostExecute:  pref.getString = "   + pref.getString("PREF_USERID","mingdefault")  );
 //                Log.d(TAG, "onPostExecute: 登入成功");
                 getIntent().putExtra("LOGIN_USERID",uid);
